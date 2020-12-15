@@ -1,0 +1,5 @@
+.vscode
+*.dSYM
+tests
+bip
+.DS_Store
