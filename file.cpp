@@ -51,7 +51,7 @@ auto File::Length (void) -> size_t
 
 auto File::Read (const string& fileName) -> bool
 {
-   auto FilePtr = fopen (fileName.c_str (), "r");
+   auto FilePtr = fopen (fileName.c_str (), "rb");
 
    if (!FilePtr)
       return false;
@@ -80,7 +80,7 @@ auto File::Resize (const size_t NewSize) -> void
 
 auto File::Write (const string& FileName) -> bool
 {
-   FILE *FilePtr = fopen (FileName.c_str (), "w");
+   FILE *FilePtr = fopen (FileName.c_str (), "wb");
 
    if (!FilePtr)
       return false;

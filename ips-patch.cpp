@@ -55,7 +55,8 @@ auto IpsPatch::ReadHunk (int &Index) -> bool
       return false;
 
    IpsHunk Hunk;
-   Hunk.offset = (Buffer[Index] & 0xff) << 16 | (Buffer[Index + 1] & 0xff) << 8 | (Buffer[Index + 2] & 0xff);
+   Hunk.offset = (Buffer[Index] & 0xff) << 16 | (Buffer[Index + 1] & 0xff) << 8 |
+                 (Buffer[Index + 2] & 0xff);
    Hunk.length = (Buffer[Index + 3] &0xff) << 8 | (Buffer[Index + 4] & 0xff);
    Hunk.payloadBuffer = Buffer;
 

@@ -3,3 +3,5 @@
 tests
 bip
 .DS_Store
+*.exe
+*.swp

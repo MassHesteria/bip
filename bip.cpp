@@ -9,7 +9,7 @@
 
 auto processCommandLine (int argc, char **argv) -> bool;
 
-int main (int argc, char **argv)
+auto main (int argc, char **argv) -> int
 {
    if (!processCommandLine (argc, argv))
       return 1;
@@ -90,6 +90,9 @@ auto processCommandLine (int argc, char **argv) -> bool
 
    if (PatchFilePath.empty () || BinaryFilePath.empty () || InvalidArguments)
       printUsage ();
+
+   if (OutputFilePath.empty ())
+      OutputFilePath = BinaryFilePath;
 
    File BinaryFile, PatchFile, OutputFile;
 
