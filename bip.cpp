@@ -91,8 +91,15 @@ auto processCommandLine (int argc, char **argv) -> bool
    if (PatchFilePath.empty () || BinaryFilePath.empty () || InvalidArguments)
       printUsage ();
 
+   string Message;
+
    if (OutputFilePath.empty ())
+   {
       OutputFilePath = BinaryFilePath;
+      Message = BinaryFilePath + " += " + PatchFilePath;
+   }
+   else
+      Message = OutputFilePath + " = " + BinaryFilePath + " + " + PatchFilePath;
 
    File BinaryFile, PatchFile, OutputFile;
 
@@ -115,16 +122,11 @@ auto processCommandLine (int argc, char **argv) -> bool
          if (!IPS.VerifySource (BinaryFile, OriginFile))
             printError ("Origin and Binary file mismatch for patch.");
 
-         print ("Verified with Origin.");
+         Message += " [verified]";
       }
 
       if (!IPS.Apply (BinaryFile, OutputFile))
          printError ("IPS patch application failed!");
-
-      if (!OutputFile.Write (OutputFilePath))
-         printError ("Failed to write output file!");
-
-      print ("Applied IPS patch!");
    }
    else if (BpsPatch::IsBpsPatch (PatchFile))
    {
@@ -132,14 +134,13 @@ auto processCommandLine (int argc, char **argv) -> bool
 
       if (!BPS.Apply (BinaryFile, OutputFile))
          printError ("BPS patch application failed!");
-
-      if (!OutputFile.Write (OutputFilePath))
-         printError ("Failed to write output file!");
-
-      print ("Applied BPS patch!");
    }
    else
       printError ("Please provide a valid IPS or BPS patch file.");
 
+   if (!OutputFile.Write (OutputFilePath))
+      printError ("Failed to write output file!");
+
+   print (Message);
    return true;
 }

@@ -13,6 +13,8 @@ class IpsPatch
          const char *payloadBuffer = NULL;
          int payloadIndex = 0;
          bool rle = false;
+
+         auto Apply (File &Target) -> void;
       };
 
    private:

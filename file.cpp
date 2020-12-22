@@ -23,6 +23,19 @@ auto File::Data (void) -> char *
    return data;
 }
 
+auto File::EndsWith (string_view Footer) -> bool
+{
+   auto Index = size - Footer.length ();
+
+   if (Index < 0)
+      return false;
+
+   if (Footer.compare (string_view (data + Index, Footer.length ())))
+      return false;
+
+   return true;
+}
+
 auto File::Exists (const string& fileName) -> bool
 {
    auto File = fopen (fileName.c_str (), "r");
@@ -76,6 +89,17 @@ auto File::Resize (const size_t NewSize) -> void
 
    size = NewSize;
    data = new char[size];
+}
+
+auto File::StartsWith (string_view Header) -> bool
+{
+   if (size < Header.length ())
+      return false;
+
+   if (Header.compare (string_view (data, Header.length ())))
+      return false;
+
+   return true;
 }
 
 auto File::Write (const string& FileName) -> bool

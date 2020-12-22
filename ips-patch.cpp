@@ -13,37 +13,26 @@ auto IpsPatch::Apply (File &FileToPatch, File &TargetFile) -> bool
       return false;
 
    TargetFile.Copy (FileToPatch, maxHunkOffset);
-   auto TargetBuffer = TargetFile.Data ();
 
    for (auto& Hunk : hunks)
-   {
-      if (Hunk.rle)
-         memset (&TargetBuffer[Hunk.offset], Hunk.payloadBuffer[Hunk.payloadIndex], Hunk.length);
-      else
-         memcpy (&TargetBuffer[Hunk.offset], &Hunk.payloadBuffer[Hunk.payloadIndex], Hunk.length);
-   }
+      Hunk.Apply (TargetFile);
 
    return true;
 }
 
+auto IpsPatch::IpsHunk::Apply (File &TargetFile) -> void
+{
+   auto TargetBuffer = TargetFile.Data ();
+
+   if (rle)
+      memset (&TargetBuffer[offset], payloadBuffer[payloadIndex], length);
+   else
+      memcpy (&TargetBuffer[offset], &payloadBuffer[payloadIndex], length);
+}
+
 auto IpsPatch::IsIpsPatch (File &PatchFile) -> bool
 {
-   auto PatchBuffer = PatchFile.Data ();
-   auto PatchLength = PatchFile.Length ();
-
-   // No patch buffer or not enough bytes?
-   if (NULL == PatchBuffer || 8 > PatchLength)
-      return false;
-
-   // Does the patch data not start with PATCH?
-   if (strncmp (PatchBuffer, "PATCH", 5))
-      return false;
-
-   // Does the patch data no end with EOF?
-   if (strncmp (&PatchBuffer[PatchLength - 3], "EOF", 3))
-      return false;
-
-   return true;
+   return PatchFile.StartsWith ("PATCH") && PatchFile.EndsWith ("EOF");
 }
 
 auto IpsPatch::ReadHunk (int &Index) -> bool

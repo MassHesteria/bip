@@ -157,18 +157,7 @@ auto BpsPatch::Decode (void) -> uint64_t
 
 auto BpsPatch::IsBpsPatch (File &PatchFile) -> bool
 {
-   auto PatchBuffer = PatchFile.Data ();
-   auto PatchLength = PatchFile.Length ();
-
-   // No patch buffer or not enough bytes?
-   if (NULL == PatchBuffer || 4 > PatchLength)
-      return false;
-
-   // Does the patch data not start with BPS1?
-   if (strncmp (PatchBuffer, "BPS1", 4))
-      return false;
-
-   return true;
+   return PatchFile.StartsWith ("BPS1");
 }
 
 auto BpsPatch::Read (void) -> uint8_t
