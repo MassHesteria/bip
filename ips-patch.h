@@ -29,5 +29,5 @@ class IpsPatch
       IpsPatch (File &PatchFile);
       auto Apply (File &FileToPatch, File &TargetFile) -> bool;
       static auto IsIpsPatch (File &PatchFile) -> bool;
-      auto VerifySource (File &FileToPatch, File &Origin) -> bool;
+      auto VerifyOrigin (File &FileToPatch, File &Origin) -> bool;
 };

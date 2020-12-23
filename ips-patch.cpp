@@ -74,7 +74,7 @@ auto IpsPatch::ReadHunk (int &Index) -> bool
    return true;
 }
 
-auto IpsPatch::VerifySource (File &FileToPatch, File &Origin) -> bool
+auto IpsPatch::VerifyOrigin (File &FileToPatch, File &Origin) -> bool
 {
    auto FileBuffer = FileToPatch.Data ();
    auto OriginBuffer = Origin.Data ();
