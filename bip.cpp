@@ -1,5 +1,4 @@
 #include <cstdio>
-#include <iostream>
 
 #include "file.h"
 #include "bps-patch.h"
@@ -17,35 +16,35 @@ auto main (int argc, char **argv) -> int
    return 0;
 }
 
-auto print (string_view view) -> void
+auto print (const char *msg) -> void
 {
-   cout << view << endl;
+   printf ("%s\n", msg);
 }
 
-auto printError (string_view view) -> void
+auto printError (const char *msg) -> void
 {
-   print (view);
+   print (msg);
    exit (1);
 }
 
 auto printHelp () -> void
 {
-   cout << "Usage: bip [-n ORIGIN_FILE] PATCH BINARY_FILE [-o OUTPUT_FILE]" << endl;
-   cout << "Apply PATCH to BINARY_FILE" << endl;
-   cout << "Example: bip g4_skip.bps SuperMetroid.sfc -o g4_skip.sfc" << endl;
+   printf ("Usage: bip [-n ORIGIN_FILE] PATCH BINARY_FILE [-o OUTPUT_FILE]\n");
+   printf ("Apply PATCH to BINARY_FILE\n");
+   printf ("Example: bip g4_skip.bps SuperMetroid.sfc -o g4_skip.sfc\n");
    exit (1);
 }
 
 auto printUsage () -> void
 {
-   cout << "Usage: bip [-n ORIGIN_FILE] PATCH BINARY_FILE [-o OUTPUT_FILE]" << endl;
-   cout << "Try 'bip --help' for more information." << endl;
+   printf ("Usage: bip [-n ORIGIN_FILE] PATCH BINARY_FILE [-o OUTPUT_FILE]\n");
+   printf ("Try 'bip --help' for more information.\n");
    exit (1);
 }
 
 auto printVersion () -> void
 {
-   cout << "bip v0.1" << endl;
+   printf ("bip v0.2\n");
    exit (1);
 }
 
@@ -141,6 +140,6 @@ auto processCommandLine (int argc, char **argv) -> bool
    if (!OutputFile.Write (OutputFilePath))
       printError ("Failed to write output file!");
 
-   print (Message);
+   print (Message.c_str ());
    return true;
 }
