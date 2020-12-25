@@ -5,6 +5,7 @@ Features
 --------
 - Supports popular ROM patch formats (IPS & BPS)
 - Origin verification for IPS patches
+- Computes CRC32 checksums
 
 
 Origin Verification

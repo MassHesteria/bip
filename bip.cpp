@@ -31,7 +31,10 @@ auto printHelp () -> void
 {
    printf ("Usage: bip [-n ORIGIN_FILE] PATCH BINARY_FILE [-o OUTPUT_FILE]\n");
    printf ("Apply PATCH to BINARY_FILE\n");
-   printf ("Example: bip g4_skip.bps SuperMetroid.sfc -o g4_skip.sfc\n");
+   printf ("Example: bip g4_skip.bps SuperMetroid.sfc -o g4_skip.sfc\n\n");
+   printf ("Usage: bip --crc32 BINARY_FILE\n");
+   printf ("Compute CRC32 for BINARY_FILE\n");
+   printf ("Example: bip --crc32 SuperMetroid.sfc\n");
    exit (1);
 }
 
@@ -44,7 +47,7 @@ auto printUsage () -> void
 
 auto printVersion () -> void
 {
-   printf ("bip v0.2\n");
+   printf ("bip v0.3\n");
    exit (1);
 }
 
@@ -54,19 +57,41 @@ auto processCommandLine (int argc, char **argv) -> bool
    string BinaryFilePath, PatchFilePath;
    string OriginFilePath, OutputFilePath;
 
-   for (int i = 1; i < argc; i++)
+   auto i = 1;
+   auto getNextArg = [&] () {
+      if (++i > argc)
+      {
+         print ("Not enough arguments");
+         printUsage ();
+      }
+
+      return argv[i];
+   };
+
+   for (; i < argc; i++)
    {
       if (!strcmp (argv[i], "-n"))
-         OriginFilePath = argv[++i];
+         OriginFilePath = getNextArg ();
 
       else if (!strcmp (argv[i], "-o"))
-         OutputFilePath = argv[++i];
+         OutputFilePath = getNextArg ();
       
       else if (!strcmp (argv[i], "--help"))
          printHelp ();
 
       else if (!strcmp (argv[i], "--version"))
          printVersion ();
+
+      else if (!strcmp (argv[i], "--crc32"))
+      {
+         File InputFile;
+
+         if (!InputFile.Read (getNextArg ()))
+            printError ("Failed to read specified file.");
+
+         printf ("%x\n", BpsPatch::Crc32 (InputFile.Data (), InputFile.Length ()));
+         exit (0);
+      }
 
       else if (argv[i][0] == '-')
       {
