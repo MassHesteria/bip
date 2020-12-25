@@ -145,8 +145,6 @@ auto processCommandLine (int argc, char **argv) -> bool
 
          if (!IPS.VerifyOrigin (BinaryFile, OriginFile))
             printError ("Origin and Binary file mismatch for patch.");
-
-         Message += " [verified]";
       }
 
       if (!IPS.Apply (BinaryFile, OutputFile))
